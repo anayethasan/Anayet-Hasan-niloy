@@ -13,14 +13,6 @@ import CursorGlow from "../components/CursorGlow";
 import Loader from "../components/Loader";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "Anayet Hossain Niloy — Software Engineer & Competitive Programmer" },
-      { name: "description", content: "Portfolio of Anayet Hossain Niloy — full stack engineer, ICPC participant, and competitive programmer building scalable systems." },
-      { property: "og:title", content: "Anayet Hossain Niloy — Software Engineer" },
-      { property: "og:description", content: "Full stack engineer & competitive programmer. ICPC Participant — Ranked 72." },
-    ],
-  }),
   component: Index,
 });
 

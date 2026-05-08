@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 const lines = [
-  "$ booting portfolio.sys ...",
-  "$ loading modules: react, framer-motion, gsap",
-  "$ compiling skills.json ...",
+  "$ initializing Niloy.exe ...",
+  "$ loading skills: DSA, Problem solving, C++, python, OOP, React, Node.js, express.js, My SQL",
+  "$ rendering portfolio ... done ✓",
   "$ initializing neon engine ✓",
   "$ welcome, recruiter.",
 ];
