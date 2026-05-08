@@ -1,7 +1,4 @@
 {
-  "functions": {
-    "src/server.ts": {
-      "runtime": "nodejs20.x"
-    }
-  }
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist/client"
 }
