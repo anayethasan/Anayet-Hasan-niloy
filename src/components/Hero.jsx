@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { FaDownload, FaEnvelope, FaCode, FaGithub } from "react-icons/fa";
+import { FaDownload, FaCode, FaGithub } from "react-icons/fa";
 import { SiCodeforces, SiCodechef, SiLeetcode, SiHackerrank } from "react-icons/si";
 import { TbBrandCSharp } from "react-icons/tb";
 import { GiNinjaHeroicStance } from "react-icons/gi";
@@ -18,7 +18,23 @@ const platformIcons = {
   "Coding Ninjas": GiNinjaHeroicStance,
 };
 
-const phrases = ["Full Stack Developer", "Problem Solver", "ICPC Participant", "Backend Engineer", "Django Developer"];
+const phrases = [
+  "Full Stack Developer",
+  "Problem Solver",
+  "ICPC Participant",
+  "Backend Engineer",
+  "Django Developer",
+];
+
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener("resize", handler);
+    return () => window.removeEventListener("resize", handler);
+  }, []);
+  return isMobile;
+}
 
 function Typewriter() {
   const [idx, setIdx] = useState(0);
@@ -34,7 +50,11 @@ function Typewriter() {
         setDel(false);
         setIdx((i) => (i + 1) % phrases.length);
       } else {
-        setText(del ? current.slice(0, text.length - 1) : current.slice(0, text.length + 1));
+        setText(
+          del
+            ? current.slice(0, text.length - 1)
+            : current.slice(0, text.length + 1)
+        );
       }
     }, speed);
     return () => clearTimeout(t);
@@ -48,9 +68,21 @@ function Typewriter() {
 }
 
 export default function Hero() {
+  const isMobile = useIsMobile();
+
+  // Orbit config based on screen size
+  const orbitRadius = isMobile ? 155 : 210;
+  const iconSize = isMobile ? 40 : 56;         // px — h/w of icon box
+  const containerH = isMobile ? 440 : 540;     // px — right column height
+  const ringSize = isMobile ? 330 : 480;        // px — dashed orbit ring
+
   return (
-    <section id="home" className="relative min-h-screen flex items-center pt-28 pb-16 px-4">
+    <section
+      id="home"
+      className="relative min-h-screen flex items-center pt-28 pb-16 px-4 overflow-x-hidden"
+    >
       <div className="mx-auto max-w-6xl grid lg:grid-cols-2 gap-12 items-center w-full">
+        {/* ── Left: Text ── */}
         <motion.div
           initial={{ opacity: 0, x: -40 }}
           animate={{ opacity: 1, x: 0 }}
@@ -58,23 +90,31 @@ export default function Hero() {
         >
           <div className="inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 mb-6">
             <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
-            <span className="font-mono text-xs text-muted-foreground">available for opportunities</span>
+            <span className="font-mono text-xs text-muted-foreground">
+              available for opportunities
+            </span>
           </div>
           <h1 className="font-mono text-4xl md:text-5xl font-bold leading-tight">
             Software Engineer
             <br />
-            <span className="text-gradient text-2xl md:text-3xl">& Competitive Programmer</span>
+            <span className="text-gradient text-2xl md:text-3xl">
+              & Competitive Programmer
+            </span>
           </h1>
           <div className="mt-6 text-lg md:text-xl">
             <span className="text-muted-foreground">&gt; </span>
             <Typewriter />
           </div>
           <p className="mt-6 max-w-xl text-muted-foreground">
-            A passionate Software Engineer focused on problem solving, scalable backend systems,
-            modern frontend development, and competitive programming.
+            A passionate Software Engineer focused on problem solving, scalable
+            backend systems, modern frontend development, and competitive
+            programming.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <a href="#projects" className="group relative overflow-hidden rounded-lg neon-border bg-primary px-6 py-3 font-mono text-sm font-semibold text-primary-foreground transition hover:scale-105 glow-shadow">
+            <a
+              href="#projects"
+              className="group relative overflow-hidden rounded-lg neon-border bg-primary px-6 py-3 font-mono text-sm font-semibold text-primary-foreground transition hover:scale-105 glow-shadow"
+            >
               View Projects
             </a>
             <a
@@ -95,26 +135,42 @@ export default function Hero() {
           </div>
         </motion.div>
 
+        {/* ── Right: Profile + Orbit ── */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.9, delay: 0.2 }}
-          className="relative h-[420px] md:h-130 flex items-center justify-center"
+          className="relative flex items-center justify-center"
+          style={{ height: `${containerH}px` }}
         >
-          <div className="absolute inset-0 m-auto h-[300px] w-[300px] md:h-[360px] md:w-[360px] rounded-full bg-primary/20 blur-3xl" />
+          {/* Glow blob */}
+          <div className="absolute inset-0 m-auto h-[260px] w-[260px] md:h-[360px] md:w-[360px] rounded-full bg-primary/20 blur-3xl" />
+
+          {/* Profile image — original size, unchanged */}
           <div className="relative h-52 w-52 md:h-64 md:w-64 rounded-full neon-border glow-shadow overflow-hidden z-10">
-            <img src={profile} alt="Anayet Hossain Niloy" className="h-full w-full object-cover" width={768} height={768} />
+            <img
+              src={profile}
+              alt="Anayet Hossain Niloy"
+              className="h-full w-full object-cover"
+              width={768}
+              height={768}
+            />
           </div>
 
-          {/* Orbit ring */}
-          <div className="absolute inset-0 m-auto h-[380px] w-[380px] md:h-[480px] md:w-[480px] rounded-full border border-dashed border-primary/30" />
+          {/* Dashed orbit ring */}
+          <div
+            className="absolute inset-0 m-auto rounded-full border border-dashed border-primary/30"
+            style={{ height: `${ringSize}px`, width: `${ringSize}px` }}
+          />
 
+          {/* Orbit icons */}
           {platforms.map((p, i) => {
             const Icon = platformIcons[p.name] || FaCode;
             const angle = (i / platforms.length) * Math.PI * 2;
-            const r = 200;
-            const x = Math.cos(angle) * r;
-            const y = Math.sin(angle) * r;
+            const x = Math.cos(angle) * orbitRadius;
+            const y = Math.sin(angle) * orbitRadius;
+            const half = iconSize / 2;
+
             return (
               <motion.a
                 key={p.name}
@@ -122,17 +178,27 @@ export default function Hero() {
                 target="_blank"
                 rel="noreferrer"
                 title={p.name}
-                className="absolute z-20 flex h-12 w-12 md:h-14 md:w-14 items-center justify-center rounded-xl glass neon-border animate-pulse-glow"
-                style={{ left: `calc(50% + ${x}px - 28px)`, top: `calc(50% + ${y}px - 28px)` }}
+                className="absolute z-20 flex items-center justify-center rounded-xl glass neon-border animate-pulse-glow"
+                style={{
+                  width: `${iconSize}px`,
+                  height: `${iconSize}px`,
+                  left: `calc(50% + ${x}px - ${half}px)`,
+                  top: `calc(50% + ${y}px - ${half}px)`,
+                }}
                 whileHover={{ scale: 1.25, rotate: 12 }}
                 animate={{ y: [0, -8, 0] }}
-                transition={{ duration: 3 + i * 0.3, repeat: Infinity, ease: "easeInOut" }}
+                transition={{
+                  duration: 3 + i * 0.3,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
               >
-                <Icon className="text-2xl text-primary" />
+                <Icon className="text-xl md:text-2xl text-primary" />
               </motion.a>
             );
           })}
 
+          {/* Badge */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
